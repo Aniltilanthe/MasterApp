@@ -43,35 +43,46 @@
   </nav>
 
   <div class="row">
-    <div class="col-md-12 medicos-body">
-      <div class="medicos-header-text">
-      Medicos helps you connect with your psychotherapist easily, whenever, whereever. <br>
-      <a>Read articles</a>, <a>Take part in discussions</a>, <a>Become a part of communities</a>; seek & receive help easily.
-      <div>
+    <div class="col-md-12 m-body">
+      <div class="m-header-text">
+        Medicos helps you connect with your psychotherapist easily, whenever, whereever. <br>
+        <a href="/#/posts">Read articles</a>, <a>Take part in discussions</a>, <a>Become a part of communities</a>; seek & receive help easily.
+      </div>
 
+      <br>
+      <br>
+
+      <div>
         <!-- Insert html view templates here -->
           <ui-view></ui-view>
 
+      </div>
     </div>
   </div>
+
+
 
 <!--_________________________________________________________________________-->
 
   <script type="text/ng-template" id="/home.html">
-      <div>
-        {{test}}
-      </div>
-      <div class="col-md-12 medicos-rowBg">
+      <div class="col-md-12 m-Grid m-rowBg m-border">
         <div ng-repeat="physician in listOfPhysicians">
           <br>
-          <div class="row">
-            <span class="medicos-doctor">
-              <a ng-show="physician.username" href="{{physician.username}}">
-                Dr. {{physician.username}}
-              </a>
-              <a ng-hide="physician.username">
-                Dr. {{physician.username}}
-              </a>
+          <div class="m-profileList">
+            <span class="m-doctor">
+              <div class="m-profileList-Header">
+                <a ng-show="physician.username" href="{{physician.username}}">
+                  Dr. {{physician.username}}
+                </a>
+                <a ng-hide="physician.username">
+                  Dr. {{physician.username}}
+                </a>
+              </div>
+              <div class="m-profileList-Body">
+              </div>
+              <div class="m-profileList-Footer">
+
+              </div>
             </span>
           </div>
           <br>
@@ -83,7 +94,6 @@
 
     <script type="text/ng-template" id="/posts.html">
       <div class="page-header">
-        <h1>Medicos</h1>
       </div>
 
       <div ng-repeat="post in posts | orderBy:'-upvotes'">
@@ -91,7 +101,7 @@
           ng-click="incrementUpvotes(post)"></span>
         {{post.upvotes}}
         <span style="font-size:20px; margin-left:10px;">
-          <a ng-show="post.link" href="{{post.link}}">
+          <a ng-show="post.link" href="#/posts/{{post._id}}">
             {{post.title}}
           </a>
           <span ng-hide="post.link">

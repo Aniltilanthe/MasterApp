@@ -11,25 +11,64 @@ a {
   cursor:pointer;
 }
 
-.medicos-body {
+.m-body {
   padding-left : 100px;
   padding-right : 100px;
 }
 
-.medicos-rowBg {
+.m-rowBg {
   background-color: #fAfAfA;
 }
 
-.medicos-header-text {
+.m-header-text {
   font-size: 20px;
   margin-left: 50px;
   margin-right: 50px;
 }
 
-.medicos-doctor {
+.m-doctor {
   font-size:20px;
   margin-left:10px;
 }
+
+.m-border {
+  border: 1px solid #e1e8ed;
+}
+
+.m-Grid {
+  display: block;
+  font-size: 0;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  border-radius: 4px;
+}
+
+.m-profileList {
+  margin-bottom: -1px;
+  border: 1px solid #e1e8ed;
+  border-radius: 4px;
+  box-sizing: border-box;
+  background-color: #fff;
+  position: relative;
+  padding: 13px 15px 13px;
+  word-break: break-all;
+}
+
+.m-profileList-Header {
+  color: #8899a6;
+  margin: 0;
+  transition: color .15s;
+}
+
+.m-profileList-Body {
+
+}
+
+.m-profileList-Footer {
+
+}
+
 
 footer {
 	position: fixed;
