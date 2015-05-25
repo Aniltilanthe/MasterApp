@@ -1,4 +1,4 @@
-var app = angular.module('Medicos', ['ui.router']);
+var app = angular.module('Medicos', ['ui.router', 'ui.bootstrap']);
 
 app.config([
 '$stateProvider',
@@ -13,6 +13,18 @@ function($stateProvider, $urlRouterProvider) {
       resolve: {
         postPromise: ['physicians', function(physicians){
           return physicians.getAll();
+        }]
+      }
+    });
+
+  $stateProvider
+    .state('userHome', {
+      url: '/users/{username}/home',
+      templateUrl: '/userHome.html',
+      controller: 'UserCtrl',
+      resolve: {
+        postPromise: ['$stateParams','users', function($stateParams, users){
+          return users.get($stateParams.username);
         }]
       }
     });
@@ -78,9 +90,30 @@ app.controller('MainCtrl', [
 '$scope',
 'physicians',
 'auth',
-function($scope, physicians, auth){
-  
+'users',
+function($scope, physicians, auth, users){
   $scope.listOfPhysicians = physicians.listOfPhysicians;
 
   $scope.isLoggedIn = auth.isLoggedIn;
+
+  $scope.user = auth.currentUserAllData();
+
+  $scope.bookAnAppointment = function(physician) {
+    var dateTime = new Date(physician.appointment.date.getFullYear(), physician.appointment.date.getMonth() , physician.appointment.date.getDate(),
+      physician.appointment.time.getHours(), physician.appointment.time.getMinutes(), physician.appointment.time.getSeconds());
+    //delete the appointment property as not needed for a physician object
+    delete physician.appointment;
+    //Book An appointment using users service
+    users.bookAnAppointment(this.user, physician, dateTime);
+  };
+
+  //initialization
+    $scope.isShowBody = false;
+
+    $scope.hstep = 1;
+    $scope.ismeridian = true;
+
+    $scope.toggleMode = function() {
+      $scope.ismeridian = ! $scope.ismeridian;
+    };
 }]);
