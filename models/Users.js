@@ -6,9 +6,49 @@ var SECRET_KEY = 'SECRETBOND';
 
 var UserSchema = new mongoose.Schema({
   username: {type: String, lowercase: true, unique: true},
+  email : String,
+  address : String,
+  city : String,
+  country: String,
+  postalCode: Number,
+  dateOfBirth: Date,
+  contactNo: Number,
   hash: String,
-  salt: String
+  salt: String,
+  appointments : [{ type: mongoose.Schema.Types.ObjectId, ref: 'Appointment' }]
 });
+
+//API: Get Age of a user
+UserSchema.methods.getAge = function(){
+  var today = new Date();
+  return ( this.profile.dateOfBirth.getDate() - today.getDate() );
+};
+
+UserSchema.methods.updateUserInfo = function(updatedUserInfo, cb) {
+  this.address = updatedUserInfo.address;
+  this.city = updatedUserInfo.city;
+  this.country = updatedUserInfo.country;
+  this.postalCode = updatedUserInfo.postalCode;
+  this.dateOfBirth = updatedUserInfo.dateOfBirth;
+  this.contactNo = updatedUserInfo.contactNo;
+  this.appointments = updatedUserInfo.appointments;
+
+  this.save(cb);
+};
+
+UserSchema.methods.getUserInfo = function(){
+  return {
+    _id : this._id,
+    username : this.username,
+    address : this.address,
+    city : this.city,
+    country : this.country,
+    postalCode : this.postalCode,
+    dateOfBirth : this.dateOfBirth,
+    contactNo : this.contactNo,
+    appointments : this.appointments
+  };
+};
 
 UserSchema.methods.setPassword = function(password){
   this.salt = crypto.randomBytes(16).toString('hex');

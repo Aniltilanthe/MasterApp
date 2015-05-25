@@ -17,7 +17,10 @@ require('./models/Posts');
 require('./models/Comments');
 require('./models/Users');
 require('./models/Physicians');
+require('./models/Appointments');
+
 require('./config/passport');
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

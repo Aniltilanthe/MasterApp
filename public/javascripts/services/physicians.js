@@ -6,9 +6,7 @@
 
 app.factory('physicians', ['$http', 'auth', function($http, auth){
   var o = {
-    listOfPhysicians: [{
-      username: "Anil Till"
-    }]
+    listOfPhysicians: []
   };
 
   o.getAll = function() {

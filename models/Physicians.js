@@ -11,7 +11,8 @@ var PhysicianSchema = new mongoose.Schema({
   speciality: String,
   registrationNo: String,
   hash: String,
-  salt: String
+  salt: String,
+  appointments : [{ type: mongoose.Schema.Types.ObjectId, ref: 'Appointment' }]
 });
 
 PhysicianSchema.methods.setPassword = function(password){

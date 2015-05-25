@@ -19,11 +19,13 @@ require('../models/Posts');
 require('../models/Comments');
 require('../models/Users');
 require('../models/Physicians');
+require('../models/Appointments');
 
 var Post = mongoose.model('Post');
 var Comment = mongoose.model('Comment');
 var User = mongoose.model('User');
 var Physician = mongoose.model('Physician');
+var Appointment = mongoose.model('Appointment');
 
 var jwt = require('express-jwt');
 
@@ -47,6 +49,72 @@ router.get('/physicians', function(req, res, next) {
   });
 });
 
+router.param('username', function(req, res, next, username) {
+  var query = User.findOne({username : username});
+
+  query.exec(function (err, user){
+    if (err) { return next(err); }
+    if (!user) { return next(new Error('can\'t find user')); }
+
+    req.user = user;
+    return next();
+  });
+});
+
+
+router.get('/users/:username/home', function(req, res, next) {
+  req.user.populate('appointments', function(err, user) {
+      if (err) { return next(err); }
+      res.json(user.getUserInfo());
+  });
+});
+
+router.post('/users/:username/profile/update', function(req, res, next) {
+  var updatedUserInfo = req.body;
+  req.user.updateUserInfo(updatedUserInfo, function(err, user){
+    if (err) { return next(err); }
+
+    res.json(user);
+  });
+
+});
+
+router.param('physician', function(req, res, next, physician) {
+  var query = Physician.findOne({username : physician});
+  query.exec(function (err, physician){
+    if (err) { return next(err); }
+    if (!physician) { return next(new Error('can\'t find physician')); }
+
+    req.physician = physician;
+    return next();
+  });
+});
+
+
+router.post('/users/:username/bookAnAppointment/:physician', function(req, res, next) {
+  var newAppointment = new Appointment(req.body);
+  newAppointment.dateTime = req.body.dateTime;
+  newAppointment.user = req.user;
+  newAppointment.username = req.user.username;
+  newAppointment.physician = req.physician;
+  newAppointment.physicianName = req.physician.username;
+
+  newAppointment.save(function(err, newAppointment){
+    if(err){ return next(err); }
+
+    req.user.appointments.push(newAppointment);
+    req.user.save(function(err, newAppointment) {
+      if(err){ return next(err); }
+    });
+
+    req.physician.appointments.push(newAppointment);
+    req.physician.save(function(err, newAppointment) {
+      if(err){ return next(err); }
+
+      res.json(newAppointment);
+    });
+  });
+});
 
 /*
 * POST :- Route for Blog Posts & Articles
@@ -68,7 +136,9 @@ router.get('/posts', function(req, res, next) {
 
 router.post('/posts', auth, function(req, res, next) {
   var post = new Post(req.body);
-  post.author = req.payload.username;
+  post.title = req.body.title;
+  post.author = req.body.username;
+  post.details = req.body.details;
 
   post.save(function(err, post){
     if(err){ return next(err); }
@@ -164,10 +234,13 @@ router.post('/register', function(req, res, next){
   }
 
   var user = new User();
-
   user.username = req.body.username;
-
-  user.setPassword(req.body.password)
+  user.setPassword(req.body.password);
+  user.address = "C461, Mahavir Tuscan";
+  user.city = "Bangalore";
+  user.country = "India";
+  user.postalCode = 560048;
+  user.contactNo = 9739222444;
 
   user.save(function (err){
     if(err){ return next(err); }
@@ -187,7 +260,9 @@ router.post('/login', function(req, res, next){
       if(err){ return next(err); }
 
       if(user){
-        return res.json({token: user.generateJWT()});
+        return res.json({ token: user.generateJWT(),
+                          userId: user._id
+                         });
       } else {
         return res.status(401).json(info);
       }
@@ -206,15 +281,10 @@ router.post('/registerPhysician', function(req, res, next){
   var physician = new Physician();
 
   physician.username = req.body.username;
-
   physician.email = req.body.email;
-
   physician.contactNo = req.body.contactNo;
-
   physician.speciality = req.body.speciality;
-
   physician.registrationNo = req.body.registrationNo;
-
   physician.setPassword(req.body.password);
 
   physician.save(function (err){

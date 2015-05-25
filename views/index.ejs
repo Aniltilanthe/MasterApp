@@ -7,29 +7,36 @@
 
 
   <!--external scripts -->
-  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.10/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
   <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.10/angular-ui-router.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
+  <!-- libraries -->
+  <script src="/javascripts/libraries/ui-bootstrap-tpls-0.13.0.min.js"></script>
+
+  <!-- Angular App initialisation -->
   <script src="/javascripts/angularApp.js"></script>
 
   <!--Services  -->
   <script src="/javascripts/services/physicians.js"></script>
   <script src="/javascripts/services/posts.js"></script>
   <script src="/javascripts/services/auth.js"></script>
+  <script src="/javascripts/services/users.js"></script>
 
   <!--Controllers -->
   <script src="/javascripts/controllers/AuthCtrl.js"></script>
   <script src="/javascripts/controllers/NavCtrl.js"></script>
   <script src="/javascripts/controllers/PostsCtrl.js"></script>
   <script src="/javascripts/controllers/APostCtrl.js"></script>
-
+  <script src="/javascripts/controllers/UserCtrl.js"></script>
 </head>
 
 <body ng-app="Medicos" ng-controller="MainCtrl">
   <nav class="navbar navbar-default" ng-controller="NavCtrl">
     <ul class="nav navbar-nav">
-      <li ><a href="/#/home">Medicos</a></li>
-      <li ><a href="/#/home">Home</a></li>
+      <li ><a ng-href="/#/home">Medicos</a></li>
+      <li ><a id="linkToUserHome" ng-show="isLoggedIn()" ng-href="/#/users/{{currentUser()}}/home">Home</a></li>
+      <li ><a ng-href="/#/posts">Posts</a></li>
     </ul>
 
     <div class="pull-right">
@@ -78,10 +85,21 @@
                   Dr. {{physician.username}}
                 </a>
               </div>
-              <div class="m-profileList-Body">
-              </div>
-              <div class="m-profileList-Footer">
 
+              <div class="m-profileList-Body" ng-mouseover="isShowBody = true" ng-mouseleave="isShowBody = false">
+                <div style="display:inline-block;" >
+                  <datepicker ng-model="physician.appointment.date" min-date="2015-06-01" show-weeks="true"
+                    class="well well-sm" custom-class="getDayClass(date, mode)" ng-show="isShowBody"></datepicker>
+                  <timepicker ng-model="physician.appointment.time" hour-step="hstep" minute-step="30"
+                    show-meridian="ismeridian" ng-show="isShowBody"></timepicker>
+                  <pre class="alert alert-info" >
+                    Date is : {{physician.appointment.date | date: 'shortDate'}} at Time: {{physician.appointment.time | date:'shortTime' }}
+                  </pre>
+                </div>
+              </div>
+
+              <div class="m-profileList-Footer" ng-mouseover="isShowBody = true" ng-mouseleave="isShowBody = false" ng-show="isShowBody">
+                <button ng-click="bookAnAppointment(physician)">Book An Appointment</button>
               </div>
             </span>
           </div>
@@ -89,6 +107,85 @@
         </div>
       </div>
     </script>
+
+<!-- ________________________________________________________________________  -->
+  <script type="text/ng-template" id="/userHome.html">
+    <div class="page-header">
+      <h3>
+        <a ng-show="user.username" href="{{user.username}}">
+          {{user.username}}
+        </a>
+        <span ng-hide="user.username">
+          {{user.username}}
+        </span>
+      </h3>
+    </div>
+
+    <!--main-->
+    <div class="container">
+	   <div class="row">
+        <!--left-->
+        <div class="col-md-3" id="leftCol">
+          <ul class="nav nav-stacked" id="sidebar">
+            <li><a href="#sec0">Profile</a></li>
+            <li><a href="#sec1">History</a></li>
+            <li><a href="#sec2">Appointments</a></li>
+            <li><a href="#sec3">Records & Prescriptions</a></li>
+            <li><a href="#sec4">Progress</a></li>
+          </ul>
+        </div><!--/left-->
+
+        <!--right-->
+        <div class="col-md-8">
+          <h2 id="sec0">Hello Mr. {{user.username}} . Hope you are having a good time.
+            <form ng-submit="updateUserProfileDetails()"  style="margin-top:30px;">
+                <div class="form-group">
+                  <input type="text" ng-readonly="!isEditable" class="form-control" placeholder="address" ng-model="user.address"></input>
+                </div>
+                <div class="form-group">
+                  <input type="text" ng-readonly="!isEditable" class="form-control" placeholder="city" ng-model="user.city"></input>
+                </div>
+                <div class="form-group">
+                  <input type="text" ng-readonly="!isEditable" class="form-control" placeholder="country" ng-model="user.country"></input>
+                </div>
+                <div class="form-group">
+                  <input type="number" ng-readonly="!isEditable" class="form-control" placeholder="postalCode" ng-model="user.postalCode"></input>
+                </div>
+                <div class="form-group">
+                  <input type="date" ng-readonly="!isEditable" class="form-control" placeholder="27-03-1992" ng-model="user.dateOfBirth"></input>
+                </div>
+                <div class="form-group">
+                  <input type="number" ng-readonly="!isEditable" class="form-control" placeholder="contactNo" ng-model="user.contactNo"></input>
+                </div>
+                <button ng-click="isEditable = !isEditable" class="btn">edit</button>
+                <button ng-show="isEditable" type="submit" class="btn btn-primary">Update</button>
+            </form>
+
+          </h2>
+
+          <h2 id="sec1">
+
+            Appointments :-
+            <div ng-repeat="appointment in user.appointments">
+              <span >Appointment with Dr. {{appointment.physicianName}} at {{appointment.dateTime | date: "HH:mm:ss"}}
+                on {{appointment.dateTime | date: "yyyy-MM-dd"}} </span>
+              <br>
+            </div>
+
+          </h2>
+
+
+          <h2 id="sec2">
+          .................<br><br><br><br>
+          Section 2
+          </h2>
+
+        </div>
+
+      </div>
+    </div>
+
+  </script>
 
 <!-- _________________________________________________________________________ -->
 
@@ -108,6 +205,12 @@
             {{post.title}}
           </span>
         </span>
+
+        <span ng-show="post.details">
+          <a>{{post.details}}</a> |
+        </span>
+
+        <br>
 
         <span ng-show="post.author">
           posted by <a>{{post.author}}</a> |
@@ -129,16 +232,13 @@
         <h3>Add a new post</h3>
 
         <div class="form-group">
-          <input type="text"
-            class="form-control"
-            placeholder="Title"
-            ng-model="title"></input>
+          <input type="text"  class="form-control" placeholder="Title"  ng-model="title"></input>
         </div>
         <div class="form-group">
-          <input type="text"
-          class="form-control"
-          placeholder="Link"
-          ng-model="link"></input>
+          <input type="text"  class="form-control"  placeholder="Details"  ng-model="details"></input>
+        </div>
+        <div class="form-group">
+          <input type="text"  class="form-control"  placeholder="Link"  ng-model="link"></input>
         </div>
         <button type="submit" class="btn btn-primary">Post</button>
       </form>
@@ -172,16 +272,11 @@
         <h3>You need to <a href="/#/login">Log In</a> or <a href="/#/register">Register</a> before you can comment.</h3>
       </div>
 
-      <form ng-submit="addComment()"
-        ng-show="isLoggedIn()"
-        style="margin-top:30px;">
+      <form ng-submit="addComment()"  ng-show="isLoggedIn()"  style="margin-top:30px;">
        <h3>Add a new comment</h3>
 
        <div class="form-group">
-         <input type="text"
-         class="form-control"
-         placeholder="Comment"
-         ng-model="body"></input>
+         <input type="text" class="form-control" placeholder="Comment" ng-model="body"></input>
        </div>
        <button type="submit" class="btn btn-primary">Post</button>
      </form>
@@ -197,57 +292,41 @@
         <span>{{ error.message }}</span>
       </div>
 
-      <form ng-submit="register()"
-        style="margin-top:30px;">
+      <form ng-submit="register()"  style="margin-top:30px;">
         <h3>Register</h3>
 
-        <br>
+        <br>1
         Choose user type: <input type="radio" ng-model="user.type" value="patient" /> User
                           <input type="radio" ng-model="user.type" value="physician" /> Physician
         <br>
         <br>
 
         <div class="form-group">
-          <input type="text"
-          class="form-control"
-          placeholder="Username"
-          ng-model="user.username"></input>
+          <input type="text"  class="form-control"  placeholder="Username"  ng-model="user.username"></input>
         </div>
 
         <span ng-show="isUserPhysician()">
             <div class="form-group">
-              <input type="text"
-              class="form-control"
-              placeholder="Email"
-              ng-model="user.email"></input>
+              <input type="text"  class="form-control"  placeholder="Email"  ng-model="user.email"></input>
             </div>
 
             <div class="form-group">
-              <input type="text"
-              class="form-control"
-              placeholder="Contact Number/Phone Number"
-              ng-model="user.contactNo"></input>
+              <input type="text"  class="form-control"  placeholder="Contact Number/Phone Number"  ng-model="user.contactNo"></input>
             </div>
 
             <div class="form-group">
-              <select ng-model="speciality"
-                ng-options="item as item.speciality for item in specialities"
+              <select ng-model="speciality"  ng-options="item as item.speciality for item in specialities"
                 placeholder="Select Speciality"></select>
             </div>
 
             <div class="form-group">
-              <input type="text"
-              class="form-control"
-              placeholder=""
-              ng-model="user.registrationNo"></input>
+              <input type="text"  class="form-control"  placeholder="Registration Number"  ng-model="user.registrationNo"></input>
             </div>
         </span>
 
         <div class="form-group">
-          <input type="password"
-          class="form-control"
-          placeholder="Password"
-          ng-model="user.password"></input>
+          <input type="password"  class="form-control"
+          placeholder="Password"  ng-model="user.password"></input>
         </div>
 
         <button type="submit" class="btn btn-primary">Register</button>
