@@ -1,6 +1,7 @@
 <html>
 <head>
   <title>Medicos</title>
+
   <!-- css -->
   <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
@@ -10,6 +11,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
   <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.10/angular-ui-router.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
 
   <!-- libraries -->
   <script src="/javascripts/libraries/ui-bootstrap-tpls-0.13.0.min.js"></script>
@@ -29,6 +31,10 @@
   <script src="/javascripts/controllers/PostsCtrl.js"></script>
   <script src="/javascripts/controllers/APostCtrl.js"></script>
   <script src="/javascripts/controllers/UserCtrl.js"></script>
+  <script src="/javascripts/controllers/PhysicianCtrl.js"></script>
+
+
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
 </head>
 
 <body ng-app="Medicos" ng-controller="MainCtrl">
@@ -56,8 +62,10 @@
         <a href="/#/posts">Read articles</a>, <a>Take part in discussions</a>, <a>Become a part of communities</a>; seek & receive help easily.
       </div>
 
+
       <br>
       <br>
+      <g:hangout render="createhangout"></g:hangout>
 
       <div>
         <!-- Insert html view templates here -->
@@ -78,7 +86,8 @@
           <div class="m-profileList">
             <span class="m-doctor">
               <div class="m-profileList-Header">
-                <a ng-show="physician.username" href="{{physician.username}}">
+                <a href="/#/physicians/aniltilanthe/profile">aniltilanthe</a>
+                <a ng-show="physician.username" href="/#/physicians/{{physician.username}}/profile">
                   Dr. {{physician.username}}
                 </a>
                 <a ng-hide="physician.username">
@@ -87,20 +96,27 @@
               </div>
 
               <div class="m-profileList-Body" ng-mouseover="isShowBody = true" ng-mouseleave="isShowBody = false">
-                <div style="display:inline-block;" >
-                  <datepicker ng-model="physician.appointment.date" min-date="2015-06-01" show-weeks="true"
-                    class="well well-sm" custom-class="getDayClass(date, mode)" ng-show="isShowBody"></datepicker>
-                  <timepicker ng-model="physician.appointment.time" hour-step="hstep" minute-step="30"
-                    show-meridian="ismeridian" ng-show="isShowBody"></timepicker>
-                  <pre class="alert alert-info" >
-                    Date is : {{physician.appointment.date | date: 'shortDate'}} at Time: {{physician.appointment.time | date:'shortTime' }}
-                  </pre>
+                <div class="row">
+                  <div style="display:inline-block;" class="col-md-5">
+                    <datepicker ng-model="physician.appointment.date" min-date="2015-06-01" show-weeks="true"
+                      class="well well-sm" custom-class="getDayClass(date, mode)" ng-show="isShowBody"></datepicker>
+                  </div>
+                  <div class="col-md-3">
+                    <timepicker ng-model="physician.appointment.time" hour-step="hstep" minute-step="30"
+                      show-meridian="ismeridian" ng-show="isShowBody"></timepicker>
+                  </div>
+                  <div class="col-md-3">
+                    <pre class="alert alert-info" >
+                      Date is : {{physician.appointment.date | date: 'shortDate'}} at Time: {{physician.appointment.time | date:'shortTime' }}
+                    </pre>
+                  </div>
+                  <div class="m-profileList-Footer" ng-mouseover="isShowBody = true" ng-mouseleave="isShowBody = false" ng-show="isShowBody">
+                    <button ng-click="bookAnAppointment(physician)">Book An Appointment</button>
+                  </div>
+
                 </div>
               </div>
 
-              <div class="m-profileList-Footer" ng-mouseover="isShowBody = true" ng-mouseleave="isShowBody = false" ng-show="isShowBody">
-                <button ng-click="bookAnAppointment(physician)">Book An Appointment</button>
-              </div>
             </span>
           </div>
           <br>
@@ -120,7 +136,7 @@
         </span>
       </h3>
     </div>
-
+    <div class="g-hangout" data-render="createhangout"></div>
     <!--main-->
     <div class="container">
 	   <div class="row">
@@ -169,6 +185,9 @@
             <div ng-repeat="appointment in user.appointments">
               <span >Appointment with Dr. {{appointment.physicianName}} at {{appointment.dateTime | date: "HH:mm:ss"}}
                 on {{appointment.dateTime | date: "yyyy-MM-dd"}} </span>
+                <span>
+                  <!-- Add Hangouts Button to launch Hangouts App for the appointment -->
+                </span>
               <br>
             </div>
 
@@ -186,6 +205,72 @@
     </div>
 
   </script>
+
+<!-- _________________________________________________________________________ -->
+    <script type="text/ng-template" id="/physicianHome.html">
+      <div class="page-header">
+        <h3>
+          <a ng-show="physician.username" href="{{physician.username}}">
+            Hello Doctor {{physician.username}}
+          </a>
+          <span ng-hide="physician.username">
+            Hello Doctor {{physician.username}}
+          </span>
+        </h3>
+      </div>
+
+      <!--main-->
+      <div class="container">
+  	   <div class="row">
+          <!--left-->
+          <div class="col-md-3" id="leftCol">
+            <ul class="nav nav-stacked" id="sidebar">
+              <li><a href="#sec0">Profile</a></li>
+              <li><a href="#sec1">History</a></li>
+              <li><a href="#sec2">Appointments</a></li>
+              <li><a href="#sec3">Records & Prescriptions</a></li>
+              <li><a href="#sec4">Progress of your Patients</a></li>
+            </ul>
+          </div><!--/left-->
+
+          <!--right-->
+          <div class="col-md-8">
+            <h2 id="sec0">Hope you are having a good time doctor.
+              <form ng-submit="updateUserProfileDetails()"  style="margin-top:30px;">
+                  <div class="form-group">
+                    <input type="text" ng-readonly="!isEditable" class="form-control" placeholder="address" ng-model="physician.address"></input>
+                  </div>
+                  <div class="form-group">
+                    <input type="text" ng-readonly="!isEditable" class="form-control" placeholder="city" ng-model="physician.city"></input>
+                  </div>
+                  <div class="form-group">
+                    <input type="text" ng-readonly="!isEditable" class="form-control" placeholder="country" ng-model="physician.country"></input>
+                  </div>
+                  <div class="form-group">
+                    <input type="number" ng-readonly="!isEditable" class="form-control" placeholder="postalCode" ng-model="physician.postalCode"></input>
+                  </div>
+                  <div class="form-group">
+                    <input type="date" ng-readonly="!isEditable" class="form-control" placeholder="27-03-1992" ng-model="physician.dateOfBirth"></input>
+                  </div>
+                  <div class="form-group">
+                    <input type="text" ng-readonly="!isEditable" class="form-control" placeholder="contactNo" ng-model="physician.contactNo"></input>
+                  </div>
+                  <div class="form-group">
+                    <input type="email" ng-readonly="!isEditable" class="form-control" placeholder="Email" ng-model="physician.email"></input>
+                  </div>
+                  <div class="form-group">
+                    <input type="text" ng-readonly="!isEditable" class="form-control" placeholder="Registration Number" ng-model="physician.registrationNo"></input>
+                  </div>
+                  <button ng-click="isEditable = !isEditable" class="btn">edit</button>
+                  <button ng-show="isEditable" type="submit" class="btn btn-primary">Update</button>
+              </form>
+
+            </h2>
+          </div>
+
+        </div>
+      </div>
+    </script>
 
 <!-- _________________________________________________________________________ -->
 

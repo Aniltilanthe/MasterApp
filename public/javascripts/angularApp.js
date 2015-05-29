@@ -30,6 +30,18 @@ function($stateProvider, $urlRouterProvider) {
     });
 
   $stateProvider
+    .state('physicianHome', {
+      url: '/physicians/{physicianName}/profile',
+      templateUrl: '/physicianHome.html',
+      controller: 'PhysicianCtrl',
+      resolve: {
+        post: ['$stateParams','physicians', function($stateParams, physicians){
+          return physicians.get($stateParams.physicianName);
+        }]
+      }
+    });
+
+  $stateProvider
     .state('posts', {
       url: '/posts',
       templateUrl: '/posts.html',
@@ -82,8 +94,6 @@ function($stateProvider, $urlRouterProvider) {
 
 /*
 * Application Controllers
-* MainCtrl - controller of our Posts tab
-* Behavior:
 */
 
 app.controller('MainCtrl', [

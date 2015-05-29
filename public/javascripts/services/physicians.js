@@ -5,15 +5,27 @@
 */
 
 app.factory('physicians', ['$http', 'auth', function($http, auth){
-  var o = {
-    listOfPhysicians: []
+  var physician = {
+    listOfPhysicians: [],
+    currentPhysician: {}
   };
 
-  o.getAll = function() {
+  physician.getAll = function() {
     return $http.get('/physicians').success(function(data){
-      angular.copy(data, o.listOfPhysicians);
+      angular.copy(data, physician.listOfPhysicians);
     });
   };
 
-  return o;
+  physician.get = function(physicianName) {
+    if (physicianName !== null && physicianName !== undefined) {
+      return $http.get('/physicians/' + physicianName + '/profile').then(function(res) {
+        angular.copy(res.data, physician.currentPhysician);
+        return res.data;
+      });
+    } else {
+      console.log("username passed is :" + physicianName + ". Pass a valid username");
+    }
+  };
+
+  return physician;
 }]);

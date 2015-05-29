@@ -39,7 +39,7 @@ var auth = jwt({secret: SECRET_KEY, userProperty: 'payload'});
 /*
 * PHYSICIANS routes
 * GET  /physicians - return a list of physicians and associated metadata
-* GET /physicians/:id - return an individual physician
+* GET /physicians/:physicianName/profile - return an individual physician
 */
 router.get('/physicians', function(req, res, next) {
   Physician.find(function(err, physicians){
@@ -49,9 +49,36 @@ router.get('/physicians', function(req, res, next) {
   });
 });
 
+router.param('physicianName', function(req, res, next, physicianName) {
+  var query = Physician.findOne({username : physicianName});
+  console.log("Physician in url" + physicianName);
+  query.exec(function (err, physician){
+    if (err) { return next(err); }
+    if (!physician) { return next(new Error('can\'t find physician')); }
+
+    req.physician = physician;
+    return next();
+  });
+});
+
+router.get('/physicians/:physicianName/profile', function(req, res, next) {
+  req.physician.populate('appointments', function(err, physician) {
+      if (err) { return next(err); }
+      res.json(physician);
+  });
+});
+
+/*
+* Users (USM) :- Route for User Mgmt System
+* GET /users/:username/home - return the user basic details information
+* POST /users/:username/profile/update - update user details profile information
+* POST /users/:username/bookAnAppointment/:physicianName - bookAnAppointment of a User & a physician
+                                                           & update in both their Records
+*/
+
 router.param('username', function(req, res, next, username) {
   var query = User.findOne({username : username});
-
+  console.log("Username in url" + username);
   query.exec(function (err, user){
     if (err) { return next(err); }
     if (!user) { return next(new Error('can\'t find user')); }
@@ -61,10 +88,10 @@ router.param('username', function(req, res, next, username) {
   });
 });
 
-
 router.get('/users/:username/home', function(req, res, next) {
   req.user.populate('appointments', function(err, user) {
       if (err) { return next(err); }
+
       res.json(user.getUserInfo());
   });
 });
@@ -79,19 +106,7 @@ router.post('/users/:username/profile/update', function(req, res, next) {
 
 });
 
-router.param('physician', function(req, res, next, physician) {
-  var query = Physician.findOne({username : physician});
-  query.exec(function (err, physician){
-    if (err) { return next(err); }
-    if (!physician) { return next(new Error('can\'t find physician')); }
-
-    req.physician = physician;
-    return next();
-  });
-});
-
-
-router.post('/users/:username/bookAnAppointment/:physician', function(req, res, next) {
+router.post('/users/:username/bookAnAppointment/:physicianName', function(req, res, next) {
   var newAppointment = new Appointment(req.body);
   newAppointment.dateTime = req.body.dateTime;
   newAppointment.user = req.user;

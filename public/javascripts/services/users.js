@@ -18,11 +18,17 @@ app.factory('users', ['$http', 'auth', function($http, auth){
 
   o.updateData = function(user) {
     var username = user.username;
-    return $http.post('/users/' + username + '/profile/update', user, {
-      headers: {Authorization: 'Bearer '+auth.getToken()}
-    }).success(function(res) {
-      angular.copy(res, o.user);
-    });
+    
+    if (user && username !== null && username !== undefined) {
+      return $http.post('/users/' + username + '/profile/update', user, {
+        headers: {Authorization: 'Bearer '+auth.getToken()}
+      }).success(function(res) {
+        angular.copy(res, o.user);
+      });
+    }
+    else {
+      console.log("pass a valid username " + username + " & user object" + user);
+    }
   };
 
   o.bookAnAppointment = function(user, physician, dateTime) {
