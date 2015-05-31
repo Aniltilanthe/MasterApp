@@ -31,7 +31,7 @@ function($stateProvider, $urlRouterProvider) {
 
   $stateProvider
     .state('physicianHome', {
-      url: '/physicians/{physicianName}/profile',
+      url: '/physicians/{physicianName}/home',
       templateUrl: '/physicianHome.html',
       controller: 'PhysicianCtrl',
       resolve: {

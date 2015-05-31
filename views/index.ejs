@@ -41,7 +41,8 @@
   <nav class="navbar navbar-default" ng-controller="NavCtrl">
     <ul class="nav navbar-nav">
       <li ><a ng-href="/#/home">Medicos</a></li>
-      <li ><a id="linkToUserHome" ng-show="isLoggedIn()" ng-href="/#/users/{{currentUser()}}/home">Home</a></li>
+      <li ><a id="linkToUserHome" ng-show="isLoggedIn() && isUser()" ng-href="/#/users/{{currentUser()}}/home">Home</a></li>
+      <li ><a id="linkToPhysicianHome" ng-show="isLoggedIn() && isPhysician()" ng-href="/#/physicians/{{currentUser()}}/home">Home</a></li>
       <li ><a ng-href="/#/posts">Posts</a></li>
     </ul>
 
@@ -86,7 +87,6 @@
           <div class="m-profileList">
             <span class="m-doctor">
               <div class="m-profileList-Header">
-                <a href="/#/physicians/aniltilanthe/profile">aniltilanthe</a>
                 <a ng-show="physician.username" href="/#/physicians/{{physician.username}}/profile">
                   Dr. {{physician.username}}
                 </a>
@@ -228,7 +228,7 @@
               <li><a href="#sec0">Profile</a></li>
               <li><a href="#sec1">History</a></li>
               <li><a href="#sec2">Appointments</a></li>
-              <li><a href="#sec3">Records & Prescriptions</a></li>
+              <li><a href="#sec3">Records & Prescriptions of Patients</a></li>
               <li><a href="#sec4">Progress of your Patients</a></li>
             </ul>
           </div><!--/left-->
@@ -320,7 +320,7 @@
           <input type="text"  class="form-control" placeholder="Title"  ng-model="title"></input>
         </div>
         <div class="form-group">
-          <input type="text"  class="form-control"  placeholder="Details"  ng-model="details"></input>
+          <textarea class="form-control" placeholder="Details" ng-model="details" rows="4"> </textarea>
         </div>
         <div class="form-group">
           <input type="text"  class="form-control"  placeholder="Link"  ng-model="link"></input>
@@ -380,9 +380,9 @@
       <form ng-submit="register()"  style="margin-top:30px;">
         <h3>Register</h3>
 
-        <br>1
-        Choose user type: <input type="radio" ng-model="user.type" value="patient" /> User
-                          <input type="radio" ng-model="user.type" value="physician" /> Physician
+        <br>
+        Choose user type: <input type="radio" ng-model="user.type" value="USER" /> User
+                          <input type="radio" ng-model="user.type" value="PHYSICIAN" /> Physician
         <br>
         <br>
 
@@ -435,8 +435,8 @@
         <h3>Log In</h3>
 
         <br>
-        Choose user type: <input type="radio" ng-model="user.type" value="patient" /> User
-                          <input type="radio" ng-model="user.type" value="physician" /> Physician
+        Choose user type: <input type="radio" ng-model="user.type" value="USER" /> User
+                          <input type="radio" ng-model="user.type" value="PHYSICIAN" /> Physician
         <br>
         <br>
 

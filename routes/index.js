@@ -61,7 +61,7 @@ router.param('physicianName', function(req, res, next, physicianName) {
   });
 });
 
-router.get('/physicians/:physicianName/profile', function(req, res, next) {
+router.get('/physicians/:physicianName/home', function(req, res, next) {
   req.physician.populate('appointments', function(err, physician) {
       if (err) { return next(err); }
       res.json(physician);
@@ -256,6 +256,7 @@ router.post('/register', function(req, res, next){
   user.country = "India";
   user.postalCode = 560048;
   user.contactNo = 9739222444;
+  user.type = "USER";
 
   user.save(function (err){
     if(err){ return next(err); }
@@ -301,6 +302,7 @@ router.post('/registerPhysician', function(req, res, next){
   physician.speciality = req.body.speciality;
   physician.registrationNo = req.body.registrationNo;
   physician.setPassword(req.body.password);
+  physician.type = "PHYSICIAN";
 
   physician.save(function (err){
     if(err){ return next(err); }

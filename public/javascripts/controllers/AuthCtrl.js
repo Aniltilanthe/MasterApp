@@ -7,7 +7,7 @@ function($scope, $state, auth){
 
 //_______________________________________
   $scope.register = function(){
-    if($scope.user.type && $scope.user.type === "patient") {
+    if($scope.user.type && $scope.user.type === "USER") {
       auth.register($scope.user).error(function(error){
         $scope.error = error;
       }).then(function(){
@@ -15,17 +15,17 @@ function($scope, $state, auth){
       });
     }
 
-    else if($scope.user.type && $scope.user.type === "physician") {
+    else if($scope.user.type && $scope.user.type === "PHYSICIAN") {
       auth.registerPhysician($scope.user).error(function(error){
         $scope.error = error;
       }).then(function(){
-        $state.go('home');
+        $state.go('physicianHome');
       });
     }
   };
 //_________________________________________
   $scope.logIn = function(){
-    if($scope.user.type && $scope.user.type === "patient") {
+    if($scope.user.type && $scope.user.type === "USER") {
       auth.logIn($scope.user).error(function(error){
         $scope.error = error;
       }).then(function(){
@@ -33,11 +33,11 @@ function($scope, $state, auth){
       });
     }
 
-    else if($scope.user.type && $scope.user.type === "physician") {
+    else if($scope.user.type && $scope.user.type === "PHYSICIAN") {
       auth.loginPhysician($scope.user).error(function(error){
         $scope.error = error;
       }).then(function(){
-        $state.go('home');
+        $state.go('physicianHome');
       });
     }
 

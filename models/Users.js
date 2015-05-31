@@ -15,6 +15,7 @@ var UserSchema = new mongoose.Schema({
   contactNo: Number,
   hash: String,
   salt: String,
+  type : String,
   appointments : [{ type: mongoose.Schema.Types.ObjectId, ref: 'Appointment' }]
 });
 
@@ -73,6 +74,7 @@ UserSchema.methods.generateJWT = function() {
     _id: this._id,
     username: this.username,
     exp: parseInt(exp.getTime() / 1000),
+    type: this.type
   }, SECRET_KEY);
 };
 

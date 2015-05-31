@@ -21,10 +21,22 @@ app.factory('auth', ['$http', '$window', function($http, $window){
     }
   };
 
+  auth.setCurrentUserType = function(payload) {
+    if (payload && payload.type === "PHYSICIAN") {
+      this.isPhysician = true;
+      this.isUser = false;
+    } else if (payload && payload.type === "USER") {
+      this.isUser = true;
+      this.isPhysician = false;
+    }
+  };
+
   auth.currentUser = function(){
     if(auth.isLoggedIn()){
       var token = auth.getToken();
       var payload = JSON.parse($window.atob(token.split('.')[1]));
+
+      auth.setCurrentUserType(payload);
 
       return payload.username;
     }
@@ -34,6 +46,8 @@ app.factory('auth', ['$http', '$window', function($http, $window){
     if(auth.isLoggedIn()){
       var token = auth.getToken();
       var payload = JSON.parse($window.atob(token.split('.')[1]));
+
+      auth.setCurrentUserType(payload);
 
       return payload;
     }

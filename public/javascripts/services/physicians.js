@@ -18,7 +18,7 @@ app.factory('physicians', ['$http', 'auth', function($http, auth){
 
   physician.get = function(physicianName) {
     if (physicianName !== null && physicianName !== undefined) {
-      return $http.get('/physicians/' + physicianName + '/profile').then(function(res) {
+      return $http.get('/physicians/' + physicianName + '/home').then(function(res) {
         angular.copy(res.data, physician.currentPhysician);
         return res.data;
       });
