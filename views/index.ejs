@@ -35,38 +35,38 @@
 
 
   <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+  <script src="/javascripts/script/publicScript.js"></script>
+  <script src="https://apis.google.com/js/client.js?onload=initGoogleApi"></script>
 </head>
 
 <body ng-app="Medicos" ng-controller="MainCtrl">
   <nav class="navbar navbar-default" ng-controller="NavCtrl">
     <ul class="nav navbar-nav">
-      <li ><a ng-href="/#/home">Medicos</a></li>
-      <li ><a id="linkToUserHome" ng-show="isLoggedIn() && isUser()" ng-href="/#/users/{{currentUser()}}/home">Home</a></li>
-      <li ><a id="linkToPhysicianHome" ng-show="isLoggedIn() && isPhysician()" ng-href="/#/physicians/{{currentUser()}}/home">Home</a></li>
-      <li ><a ng-href="/#/posts">Posts</a></li>
+      <li ><a ng-href="/#/home" data-toggle="tooltip" tooltip="Look for Doc" tooltip-placement="bottom">Medicos</a></li>
+      <li ><a id="linkToUserHome" ng-show="isLoggedIn() && isUser()" ng-href="/#/users/{{currentUser()}}/home"
+              data-toggle="tooltip" tooltip="Home" tooltip-placement="bottom">Home</a></li>
+      <li ><a id="linkToPhysicianHome" ng-show="isLoggedIn() && isPhysician()" ng-href="/#/physicians/{{currentUser()}}/home"
+              data-toggle="tooltip" tooltip="Home" tooltip-placement="bottom">Home</a></li>
+      <li ><a ng-href="/#/posts"
+              data-toggle="tooltip" tooltip="Discussions" tooltip-placement="bottom">Posts</a></li>
     </ul>
 
     <div class="pull-right">
       <ul class="nav navbar-nav">
-        <li ng-show="isLoggedIn()"><a>Welcome {{currentUser()}}</a></li>
+        <li ng-show="isLoggedIn()"><a data-toggle="tooltip" tooltip="Nice to have you!" tooltip-placement="left">Welcome {{currentUser()}}</a></li>
         <li ng-show="isLoggedIn()"><a href="" ng-click="logOut()">Log Out</a></li>
-        <li ng-hide="isLoggedIn()"><a href="/#/login">Log In</a></li>
-        <li ng-hide="isLoggedIn()"><a href="/#/register">Register</a></li>
+        <li ng-hide="isLoggedIn()"><a href="/#/login" data-toggle="tooltip" tooltip="Existing User" tooltip-placement="bottom">Log In</a></li>
+        <li ng-hide="isLoggedIn()"><a href="/#/register"
+                                      data-toggle="tooltip" tooltip="Register as a New User for more features" tooltip-placement="bottom">
+                                        Register
+                                    </a></li>
       </ul>
     </div>
   </nav>
 
   <div class="row">
     <div class="col-md-12 m-body">
-      <div class="m-header-text">
-        Medicos helps you connect with your psychotherapist easily, whenever, whereever. <br>
-        <a href="/#/posts">Read articles</a>, <a>Take part in discussions</a>, <a>Become a part of communities</a>; seek & receive help easily.
-      </div>
-
-
-      <br>
-      <br>
-      <g:hangout render="createhangout"></g:hangout>
 
       <div>
         <!-- Insert html view templates here -->
@@ -81,6 +81,12 @@
 <!--_________________________________________________________________________-->
 
   <script type="text/ng-template" id="/home.html">
+      <div class="m-header-text">
+        Medicos helps you connect with your psychotherapist easily, whenever, whereever. <br>
+        <a href="/#/posts">Read articles</a>, <a>Take part in discussions</a>, <a>Become a part of communities</a>; seek & receive help easily.
+      </div>
+      <g:hangout render="createhangout"></g:hangout>
+
       <div class="col-md-12 m-Grid m-rowBg m-border">
         <div ng-repeat="physician in listOfPhysicians">
           <br>
@@ -98,6 +104,16 @@
               <div class="m-profileList-Body" ng-mouseover="isShowBody = true" ng-mouseleave="isShowBody = false">
                 <div class="row">
                   <div style="display:inline-block;" class="col-md-5">
+
+                  <div class="col-md-6 row">
+                    <p class="input-group">
+                      <input type="text" class="form-control" datepicker-popup="'dd-MMMM-yyyy'" ng-model="physician.appointment.date" is-open="false" min-date="2015-06-01" ng-required="true" close-text="Close" />
+                      <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                      </span>
+                    </p>
+                  </div>
+
                     <datepicker ng-model="physician.appointment.date" min-date="2015-06-01" show-weeks="true"
                       class="well well-sm" custom-class="getDayClass(date, mode)" ng-show="isShowBody"></datepicker>
                   </div>
@@ -121,6 +137,7 @@
           </div>
           <br>
         </div>
+        <pre id="output"></pre>
       </div>
     </script>
 
@@ -139,7 +156,7 @@
     <div class="g-hangout" data-render="createhangout"></div>
     <!--main-->
     <div class="container">
-	   <div class="row">
+       <div class="row">
         <!--left-->
         <div class="col-md-3" id="leftCol">
           <ul class="nav nav-stacked" id="sidebar">
@@ -155,6 +172,9 @@
         <div class="col-md-8">
           <h2 id="sec0">Hello Mr. {{user.username}} . Hope you are having a good time.
             <form ng-submit="updateUserProfileDetails()"  style="margin-top:30px;">
+                <div class="form-group">
+                  <input type="text" ng-readonly="!isEditable" class="form-control" placeholder="email" ng-model="user.email"></input>
+                </div>
                 <div class="form-group">
                   <input type="text" ng-readonly="!isEditable" class="form-control" placeholder="address" ng-model="user.address"></input>
                 </div>
@@ -195,8 +215,16 @@
 
 
           <h2 id="sec2">
-          .................<br><br><br><br>
-          Section 2
+            .................<br><br>
+
+            <ul id="calenderUl"> </ul>
+
+            <button id="googleAuthButton" onclick="handleAuthClick(event)">
+              Authorize by Google
+            </button>
+            <pre id="output"></pre>
+
+            <br><br>
           </h2>
 
         </div>
@@ -221,7 +249,7 @@
 
       <!--main-->
       <div class="container">
-  	   <div class="row">
+         <div class="row">
           <!--left-->
           <div class="col-md-3" id="leftCol">
             <ul class="nav nav-stacked" id="sidebar">
@@ -390,11 +418,11 @@
           <input type="text"  class="form-control"  placeholder="Username"  ng-model="user.username"></input>
         </div>
 
-        <span ng-show="isUserPhysician()">
-            <div class="form-group">
-              <input type="text"  class="form-control"  placeholder="Email"  ng-model="user.email"></input>
-            </div>
+        <div class="form-group">
+          <input type="text"  class="form-control"  placeholder="Email"  ng-model="user.email"></input>
+        </div>
 
+        <span ng-show="isUserPhysician()">
             <div class="form-group">
               <input type="text"  class="form-control"  placeholder="Contact Number/Phone Number"  ng-model="user.contactNo"></input>
             </div>
@@ -410,8 +438,7 @@
         </span>
 
         <div class="form-group">
-          <input type="password"  class="form-control"
-          placeholder="Password"  ng-model="user.password"></input>
+          <input type="password"  class="form-control" placeholder="Password"  ng-model="user.password"></input>
         </div>
 
         <button type="submit" class="btn btn-primary">Register</button>

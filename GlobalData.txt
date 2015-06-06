@@ -1,0 +1,21 @@
+Google OAuth 2.0
+
+Client ID for web application
+
+Client ID: 943541244956-8sj4q0ephevi3lfktcuv3mfdmu95048k.apps.googleusercontent.com
+Email address: 943541244956-8sj4q0ephevi3lfktcuv3mfdmu95048k@developer.gserviceaccount.com
+Client secret: 8AATSRc8l7f5KIFXmpI6uEh-
+Redirect URIs: http://localhost:3000/oauth2callback
+JavaScript origins: http://localhost:3000/
+
+________________________________________________________________________
+Public API access
+
+key for browser applications
+
+API key: AIzaSyAPmExamst-E9x4KF_U7cEHgwquWitzjG0
+Referrers: http://localhost:3000/
+Activation date: Jun 3, 2015, 1:18:00 PM
+Activated by: aniltilanthe92@gmail.com (you)
+
+_______________________________________________________________________

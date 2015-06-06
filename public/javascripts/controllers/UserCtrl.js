@@ -13,4 +13,6 @@ function($scope, users, auth){
     users.updateData(this.user);
   };
 
+  loadGoogleCalendarEvents();
+
 }]);

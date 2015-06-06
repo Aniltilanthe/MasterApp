@@ -26,6 +26,7 @@ UserSchema.methods.getAge = function(){
 };
 
 UserSchema.methods.updateUserInfo = function(updatedUserInfo, cb) {
+  this.email = updatedUserInfo.email;
   this.address = updatedUserInfo.address;
   this.city = updatedUserInfo.city;
   this.country = updatedUserInfo.country;
@@ -41,6 +42,7 @@ UserSchema.methods.getUserInfo = function(){
   return {
     _id : this._id,
     username : this.username,
+    email : this.email,
     address : this.address,
     city : this.city,
     country : this.country,
@@ -69,12 +71,14 @@ UserSchema.methods.generateJWT = function() {
   var today = new Date();
   var exp = new Date(today);
   exp.setDate(today.getDate() + 60);
+  console.log("email"+ this.email + "username" + this.username);
 
   return jwt.sign({
     _id: this._id,
     username: this.username,
     exp: parseInt(exp.getTime() / 1000),
-    type: this.type
+    type: this.type,
+    email: this.email
   }, SECRET_KEY);
 };
 

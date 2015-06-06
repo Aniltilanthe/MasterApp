@@ -108,22 +108,29 @@ function($scope, physicians, auth, users){
 
   $scope.user = auth.currentUserAllData();
 
+  //initialization
+  $scope.isShowBody = false;
+
+  $scope.hstep = 1;
+  $scope.ismeridian = true;
+
+  $scope.toggleMode = function() {
+    $scope.ismeridian = !$scope.ismeridian;
+  };
+
   $scope.bookAnAppointment = function(physician) {
     var dateTime = new Date(physician.appointment.date.getFullYear(), physician.appointment.date.getMonth() , physician.appointment.date.getDate(),
       physician.appointment.time.getHours(), physician.appointment.time.getMinutes(), physician.appointment.time.getSeconds());
+
+    var endTime = new Date(physician.appointment.date.getFullYear(), physician.appointment.date.getMonth() , physician.appointment.date.getDate(),
+      physician.appointment.time.getHours() + 1, physician.appointment.time.getMinutes(), physician.appointment.time.getSeconds());
+
+    //create a Google Event for user
+    createGoogleCalendarEvent($scope.user.email, physician.email, physician.username, dateTime, endTime);
+
     //delete the appointment property as not needed for a physician object
     delete physician.appointment;
     //Book An appointment using users service
-    users.bookAnAppointment(this.user, physician, dateTime);
+    users.bookAnAppointment($scope.user, physician, dateTime);
   };
-
-  //initialization
-    $scope.isShowBody = false;
-
-    $scope.hstep = 1;
-    $scope.ismeridian = true;
-
-    $scope.toggleMode = function() {
-      $scope.ismeridian = ! $scope.ismeridian;
-    };
 }]);

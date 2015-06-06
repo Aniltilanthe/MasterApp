@@ -106,6 +106,7 @@ router.post('/users/:username/profile/update', function(req, res, next) {
 
 });
 
+//Create a new Appointment & save it for both User & Physician
 router.post('/users/:username/bookAnAppointment/:physicianName', function(req, res, next) {
   var newAppointment = new Appointment(req.body);
   newAppointment.dateTime = req.body.dateTime;
@@ -251,12 +252,8 @@ router.post('/register', function(req, res, next){
   var user = new User();
   user.username = req.body.username;
   user.setPassword(req.body.password);
-  user.address = "C461, Mahavir Tuscan";
-  user.city = "Bangalore";
-  user.country = "India";
-  user.postalCode = 560048;
-  user.contactNo = 9739222444;
   user.type = "USER";
+  user.email = req.body.email;
 
   user.save(function (err){
     if(err){ return next(err); }
