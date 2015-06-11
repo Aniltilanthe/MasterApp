@@ -133,4 +133,11 @@ function($scope, physicians, auth, users){
     //Book An appointment using users service
     users.bookAnAppointment($scope.user, physician, dateTime);
   };
+
+  $scope.goToThisDetails = function(ids,alignToTop){
+    //debugger;
+    var redText = document.getElementById(ids);
+    redText.scrollIntoView(alignToTop);
+  };
+
 }]);

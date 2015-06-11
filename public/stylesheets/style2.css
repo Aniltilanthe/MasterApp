@@ -12,7 +12,7 @@ a {
 }
 
 .m-body {
-  padding-left : 100px;
+ // padding-left : 100px;
   padding-right : 100px;
 }
 
@@ -22,13 +22,13 @@ a {
 
 .m-header-text {
   font-size: 20px;
-  margin-left: 50px;
+  //margin-left: 50px;
   margin-right: 50px;
 }
 
 .m-doctor {
   font-size:20px;
-  margin-left:10px;
+  //margin-left:10px;
 }
 
 .m-border {
@@ -42,7 +42,6 @@ a {
   padding: 0;
   text-align: left;
   border-radius: 4px;
-
 }
 
 .m-profileList {
@@ -57,7 +56,7 @@ a {
 }
 
 .m-profileList-Header {
-  color: red;
+  color: #8899a6;
   margin: 0;
   transition: color .15s;
 }
@@ -87,9 +86,8 @@ footer p {
 }
 #header1{
   position: fixed;
-  height: 30px;
-  width: 1350px;
+  position: absolute;
+  height: 50px;
   z-index: 1;
   top: 0;
-  color: red;
 }

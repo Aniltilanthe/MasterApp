@@ -10,6 +10,7 @@ function initGoogleApi() {
   window.setTimeout(checkAuth,1);
 
   gapi.client.register('calendar.events.insert', { 'apiVersion' : 'v3'});
+  gapi.client.register('plus.people.get', {'apiVersion' : 'v1'});
 };
 
 function checkAuth() {
@@ -179,3 +180,48 @@ function createGoogleCalendarEvent(userEmail, physicianEmail, physicianUsername,
     }
   });
 };
+
+
+
+signinCallback =  function(authResult) {
+    console.log("HemllO");
+    //debugger;
+    if (authResult['status']['signed_in']) {
+      label = 'User granted access:';
+        gapi.auth.setToken(authResult);
+      // Update the app to reflect a signed in user
+      // Hide the sign-in button now that the user is authorized, for example:
+      document.getElementById('signinButton').setAttribute('style', 'display: none');
+    } else {
+      // Update the app to reflect a signed out user
+      // Possible error values:
+      //   "user_signed_out" - User is signed-out
+      //   "access_denied" - User denied access to your app
+      //   "immediate_failed" - Could not automatically log in the user
+      label = 'Access denied: ' + authResult['error']
+      console.log('Sign-in state: ' + authResult['error']);
+
+    }
+
+    request = gapi.client.plus.people.get({
+    'userId' : 'me'
+    });
+
+    request.execute(function(resp) {
+      console.log('ID: ' + resp.id);
+      console.log('Display Name: ' + resp.displayName);
+      console.log('Image URL: ' + resp.image.url);
+      console.log('Profile URL: ' + resp.url);
+    });
+
+
+
+
+
+
+
+
+
+
+
+  };
