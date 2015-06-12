@@ -56,9 +56,4 @@ function($scope, $state, auth){
   $scope.speciality = "Psychiatry";
 //_______________________________________
 
-
-
-
-
-
-}])
+}]);

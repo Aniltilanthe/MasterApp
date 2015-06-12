@@ -184,11 +184,6 @@ function createGoogleCalendarEvent(userEmail, physicianEmail, physicianUsername,
 
 
 signinCallback =  function(authResult) {
-
-
-    
-
-
     if (authResult['status']['signed_in']) {
       label = 'User granted access:';
         gapi.auth.setToken(authResult);
@@ -209,13 +204,6 @@ signinCallback =  function(authResult) {
     request = gapi.client.plus.people.get({
     'userId' : 'me'
     })
-  
-
-
-
-
-
-
 
     request.execute(function(resp) {
       console.log('ID: ' + resp.id);
@@ -223,11 +211,5 @@ signinCallback =  function(authResult) {
       console.log('Image URL: ' + resp.image.url);
       console.log('Profile URL: ' + resp.url);
       console.log('Email':resp.emails[0].value);
-
-
-
-
-     
     });
-
-  };
+};

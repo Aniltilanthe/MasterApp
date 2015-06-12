@@ -6,16 +6,15 @@
   <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
 
-
   <!--external scripts -->
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
   <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.10/angular-ui-router.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-
+  <script src="https://apis.google.com/js/client:platform.js" async defer> </script>
 
   <!-- libraries -->
-  <script src="/javascripts/libraries/ui-bootstrap-tpls-0.13.0.min.js"></script>
-<script src="https://apis.google.com/js/client:platform.js" async defer> </script>
+  <scriptsrc="/javascripts/libraries/ui-bootstrap-tpls-0.13.0.min.js"></script>
+
   <!-- Angular App initialisation -->
   <script src="/javascripts/angularApp.js"></script>
 
@@ -32,9 +31,6 @@
   <script src="/javascripts/controllers/APostCtrl.js"></script>
   <script src="/javascripts/controllers/UserCtrl.js"></script>
   <script src="/javascripts/controllers/PhysicianCtrl.js"></script>
-
-
- 
 
   <script src="/javascripts/script/publicScript.js"></script>
   <script src="https://apis.google.com/js/client.js?onload=initGoogleApi"></script>
@@ -65,17 +61,14 @@
       </ul>
     </div>
   </nav>
-
-  <div class="row">
-    </div>
 </div>
-      <div>
-        <!-- Insert html view templates here -->
-          <ui-view></ui-view>
 
-     
-    </div>
-  
+  <div>
+      <!-- Insert html view templates here -->
+      <ui-view></ui-view>
+
+  </div>
+
 
 <!--_________________________________________________________________________-->
 
@@ -145,7 +138,7 @@
   <script type="text/ng-template" id="/userHome.html">
     <div class="container-fluid">
       <div class="row">
-    
+
         <div class="col-sm-2 "   style="background-color:#d2b481;position:fixed">
           <div>
           <br><br><br><br><br><br><br>
@@ -156,10 +149,10 @@
             <br><button type="button" class="btn btn-warning btn-sm" style="margin-left:45px ">Logout</button>
             <br><br><br><br>
           </div>
-         
+
           <div class="sidebar-nav" style="background-color:#d2b481;padding:0px 0px 0px 0px;margin:0px 0px 0px 0px;border:1px #d2b481 ">
                 <div class="navbar navbar-default" role="navigation" style="background-color:#d2b481;border:1px #d2b481">
-                  <div class="navbar-header" style="background-color:#d2b481;border:1px #d2b481">          
+                  <div class="navbar-header" style="background-color:#d2b481;border:1px #d2b481">
                     <span class="visible-xs navbar-brand">Sidebar menu</span>
                   </div>
                   <div class="navbar-collapse collapse sidebar-navbar-collapse" style="background-color:#d2b481">
@@ -283,10 +276,10 @@
 
       </div>
     </div>
- <!--Add content-->   
-<br><br><br><br><br><br><br><br><br><br><br><br>
+    <!--Add content-->
+    <br><br><br><br><br><br><br><br><br><br><br><br>
 
-        <!--right-->
+    <!--right-->
 
   </script>
 
@@ -513,8 +506,7 @@
         <span>{{ error.message }}</span>
       </div>
 
-      <form ng-submit="logIn()"
-        style="margin-top:30px;">
+      <form ng-submit="logIn()" style="margin-top:30px;">
         <h3>Log In</h3>
 
         <br>
@@ -538,8 +530,6 @@
         <button type="submit" class="btn btn-primary">Log In</button>
       </form>
 
-
-
       <span id="signinButton">
         <span
           class="g-signin"
@@ -547,10 +537,7 @@
           data-clientid="943541244956-8sj4q0ephevi3lfktcuv3mfdmu95048k.apps.googleusercontent.com"
           data-cookiepolicy="single_host_origin"
           data-requestvisibleactions="http://schema.org/AddAction"
-          data-scope="https://www.googleapis.com/auth/plus.login email"
-           
-          
-          >
+          data-scope="https://www.googleapis.com/auth/plus.login email">
         </span>
       </span>
 

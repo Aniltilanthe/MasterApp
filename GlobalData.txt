@@ -19,7 +19,3 @@ Activation date: Jun 3, 2015, 1:18:00 PM
 Activated by: aniltilanthe92@gmail.com (you)
 
 ____________________________________________________________________
-Client ID for google sign in button
-client id=80751348348-il8qcjdh8op35v320fu79v5rorpjmgo8.apps.googleusercontent.com
-client secret=80751348348-il8qcjdh8op35v320fu79v5rorpjmgo8@developer.gserviceaccount.com
-medicos-971 
