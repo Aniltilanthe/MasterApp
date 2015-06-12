@@ -14,5 +14,6 @@ function($scope, users, auth){
   };
 
   loadGoogleCalendarEvents();
+  
 
 }]);

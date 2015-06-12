@@ -133,4 +133,14 @@ function($scope, physicians, auth, users){
     //Book An appointment using users service
     users.bookAnAppointment($scope.user, physician, dateTime);
   };
+/*This purpose of this function is to accomplish the purpose of
+sliding down to a particular part on the same page.
+It does so by taking a parameter ids and get its value in a variable redText and bring it into the 
+top of the page using the method scrollIntoView and passing it the parameter alignToTop*/
+  $scope.goToThisDetails = function(ids,alignToTop){
+    
+    var redText = document.getElementById(ids);
+    redText.scrollIntoView(alignToTop);
+  };
+
 }]);
