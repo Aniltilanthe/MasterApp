@@ -11,7 +11,6 @@
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
   <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.10/angular-ui-router.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-  <script src="https://apis.google.com/js/client:platform.js" async defer> </script>
 
 
   <!-- libraries -->
@@ -81,192 +80,197 @@
 <!--_________________________________________________________________________-->
 
   <script type="text/ng-template" id="/home.html">
-  <link rel="stylesheet"  type="text/css" href="style2.css">
-  <link rel="stylesheet"  type="text/css" href="vertical.css">
-
-<div class="container-fluid">
-  
-        
-  <div class="row">
-    <div class="col-sm-2 "   style="background-color:#d2b481;position:fixed">
-    <div>
-    <br><br><br><br><br><br><br>
-    <div style="padding-left:30px">
-      <p style="color:white;font-family:Arial;font-size:30px">   Medicos</p>
-      <p style="color:grey;font-family:Arial;font-size:18px;padding-left:20px">   To infinity</p>
-      <img src="http://valleyosteopathy.com.au/wp-content/uploads/2013/11/facebook-default-no-profile-pic1.jpg" alt="ide" height="100" width="100" class="img-circle"></img></div>
-      <br><button type="button" class="btn btn-warning btn-sm" style="margin-left:45px ">Logout</button>
-<br><br><br><br>
-</div>
-<div class="sidebar-nav" style="background-color:#d2b481;padding:0px 0px 0px 0px;margin:0px 0px 0px 0px;border:1px #d2b481 ">
-      <div class="navbar navbar-default" role="navigation" style="background-color:#d2b481;border:1px #d2b481">
-        <div class="navbar-header" style="background-color:#d2b481;border:1px #d2b481">
-          
-          <span class="visible-xs navbar-brand">Sidebar menu</span>
-        </div>
-        <div class="navbar-collapse collapse sidebar-navbar-collapse" style="background-color:#d2b481">
-          <ul class="nav navbar-nav" style="background-color:#d2b481">
-            <li class="active" style="background-color:red"><a style="background-color:#d2b481"href="#">Appointments</a></li>
-            <li style="background-color:#d2b481"><a href="#" ng-click="goToThisDetails('doctors',true)">Doctors</a></li><br><br><br><br>
-            <li style="background-color:#d2b481;padding-left:3px;margin-left:1px"><a href="#" ng-click= "goToThisDetails('meetings',true)">Meetings</a></li>
-            <li style="background-color:#d2b481"><a href="#"  ng-click="goToThisDetails('prescriptions',true)" >Prescriptions</a></li>
-            <li style="background-color:#d2b481"><a href="#" align="bottom" ng-click="goToThisDetails('personalinfo',true)" >Personal Information</a></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-
-
-            
-          </ul>
-        </div><!--/.nav-collapse -->
+      <div class="m-header-text">
+        Medicos helps you connect with your psychotherapist easily, whenever, whereever. <br>
+        <a href="/#/posts">Read articles</a>, <a>Take part in discussions</a>, <a>Become a part of communities</a>; seek & receive help easily.
       </div>
-    </div>
+      <g:hangout render="createhangout"></g:hangout>
 
+      <div class="col-md-12 m-Grid m-rowBg m-border">
+        <div ng-repeat="physician in listOfPhysicians">
+          <br>
+          <div class="m-profileList">
+            <span class="m-doctor">
+              <div class="m-profileList-Header">
+                <a ng-show="physician.username" href="/#/physicians/{{physician.username}}/profile">
+                  Dr. {{physician.username}}
+                </a>
+                <a ng-hide="physician.username">
+                  Dr. {{physician.username}}
+                </a>
+              </div>
 
+              <div class="m-profileList-Body" ng-mouseover="isShowBody = true" ng-mouseleave="isShowBody = false">
+                <div class="row">
+                  <div style="display:inline-block;" class="col-md-5">
 
+                  <div class="col-md-6 row">
+                    <p class="input-group">
+                      <input type="text" class="form-control" datepicker-popup="'dd-MMMM-yyyy'" ng-model="physician.appointment.date" is-open="false" min-date="2015-06-01" ng-required="true" close-text="Close" />
+                      <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                      </span>
+                    </p>
+                  </div>
 
-    </div>
-    <div class="col-sm-10 col-lg-offset-2 "   style="background-color:grey;">
-    <br> <br> <br><br><br><br>
-      <p style="font-size:20px; padding-left:50px"> Medicos helps you connect with your psychotherapist easily,whenever,wherever.</p>
-      <p style="font-size:20px ;padding-left:50px"><a href="#">Read articles</a>,<a href="#">take part in discussions</a><a href="#"> and become a part of the community</a>
+                    <datepicker ng-model="physician.appointment.date" min-date="2015-06-01" show-weeks="true"
+                      class="well well-sm" custom-class="getDayClass(date, mode)" ng-show="isShowBody"></datepicker>
+                  </div>
+                  <div class="col-md-3">
+                    <timepicker ng-model="physician.appointment.time" hour-step="hstep" minute-step="30"
+                      show-meridian="ismeridian" ng-show="isShowBody"></timepicker>
+                  </div>
+                  <div class="col-md-3">
+                    <pre class="alert alert-info" >
+                      Date is : {{physician.appointment.date | date: 'shortDate'}} at Time: {{physician.appointment.time | date:'shortTime' }}
+                    </pre>
+                  </div>
+                  <div class="m-profileList-Footer" ng-mouseover="isShowBody = true" ng-mouseleave="isShowBody = false" ng-show="isShowBody">
+                    <button ng-click="bookAnAppointment(physician)">Book An Appointment</button>
+                  </div>
 
+                </div>
+              </div>
 
-      <div class="jumbotron">
-      <h1>Welcome {{currentUser()}}</h1>
-      <br>
-      <button type="button" class="btn btn-warning" style="margin-left:30px">See Appointments</button>
-    </div>
+            </span>
+          </div>
+          <br>
+        </div>
+        <pre id="output"></pre>
+      </div>
 
-<br><br><br><br><br><br><br><br><br><br><br><br>
-
-<div id="doctors">
-<div class="jumbotron">
-
-	
-		<h1>Here is the list of doctors available</h1>
-		<ul>
-		<li>Dr a</li>
-		<li>Dr b</li>
-		<li>Dr c</li>
-		<li>Dr d</li>
-		</ul>
-	</div>
-</div>
-<br><br><br><br><br><br><br><br><br>
-<br><br>
-
-<div id="prescriptions">
-<div class="jumbotron">
-<h2>If you want prescriptions,you have come to the right place</h2>
-<h3>Some prescriptions are to be added here depending upon the user</h3>
-</div>
-</div>
-<br><br><br><br><br><br>
-<div id ="personalinfo">
-<div class="jumbotron">
-<h3>Personal information of the user is to be added here</h3>
-</div>
-</div>
-
-<br><br><br><br><br><br><br><br>
-<br><br>
-
-<div id="meetings">
-<div class="jumbotron">
-<h3>Here the meetings of the user are to be added based on his appointments</h3>
-</div></div>
-  </div>
-</div>
- <!--Add content-->   
-<br><br><br><br><br><br><br><br><br><br><br><br>
-
-
-
-
-
-
-
-
-    </script>
+  </script>
 
 <!-- ________________________________________________________________________  -->
   <script type="text/ng-template" id="/userHome.html">
-    <div class="page-header">
-      <h3>
-        <a ng-show="user.username" href="{{user.username}}">
-          {{user.username}}
-        </a>
-        <span ng-hide="user.username">
-          {{user.username}}
-        </span>
-      </h3>
-    </div>
-    <div class="g-hangout" data-render="createhangout"></div>
-    <!--main-->
-    <div class="container">
-       <div class="row">
-        <!--left-->
-        <div class="col-md-3" id="leftCol">
-          <ul class="nav nav-stacked" id="sidebar">
-            <li><a href="#sec0">Profile</a></li>
-            <li><a href="#sec1">History</a></li>
-            <li><a href="#sec2">Appointments</a></li>
-            <li><a href="#sec3">Records & Prescriptions</a></li>
-            <li><a href="#sec4">Progress</a></li>
-          </ul>
-        </div><!--/left-->
-
-        <!--right-->
-        <div class="col-md-8">
-          <h2 id="sec0">Hello Mr. {{user.username}} . Hope you are having a good time.
-            <form ng-submit="updateUserProfileDetails()"  style="margin-top:30px;">
-                <div class="form-group">
-                  <input type="text" ng-readonly="!isEditable" class="form-control" placeholder="email" ng-model="user.email"></input>
+    <div class="container-fluid">
+      <div class="row">
+    
+        <div class="col-sm-2 "   style="background-color:#d2b481;position:fixed">
+          <div>
+          <br><br><br><br><br><br><br>
+          <div style="padding-left:30px">
+            <p style="color:white;font-family:Arial;font-size:30px">   Medicos</p>
+            <p style="color:grey;font-family:Arial;font-size:18px;padding-left:20px">   To infinity</p>
+            <img src="http://valleyosteopathy.com.au/wp-content/uploads/2013/11/facebook-default-no-profile-pic1.jpg" alt="ide" height="100" width="100" class="img-circle"></img></div>
+            <br><button type="button" class="btn btn-warning btn-sm" style="margin-left:45px ">Logout</button>
+            <br><br><br><br>
+          </div>
+         
+          <div class="sidebar-nav" style="background-color:#d2b481;padding:0px 0px 0px 0px;margin:0px 0px 0px 0px;border:1px #d2b481 ">
+                <div class="navbar navbar-default" role="navigation" style="background-color:#d2b481;border:1px #d2b481">
+                  <div class="navbar-header" style="background-color:#d2b481;border:1px #d2b481">          
+                    <span class="visible-xs navbar-brand">Sidebar menu</span>
+                  </div>
+                  <div class="navbar-collapse collapse sidebar-navbar-collapse" style="background-color:#d2b481">
+                    <ul class="nav navbar-nav" style="background-color:#d2b481">
+                      <li class="active" style="background-color:red">
+                        <a style="background-color:#d2b481"href="#">Appointments</a>
+                      </li>
+                      <li style="background-color:#d2b481">
+                        <a href="#" ng-click="goToThisDetails('doctors',true)">Doctors</a>
+                      </li>
+                      <li style="background-color:#d2b481">
+                        <a href="#" ng-click="goToThisDetails('meetings',true)">Meetings</a>
+                      </li>
+                      <li style="background-color:#d2b481">
+                        <a href="#" ng-click="goToThisDetails('prescriptions',true)">Prescriptions</a>
+                      </li>
+                      <li style="background-color:#d2b481">
+                        <a href="#" align="bottom" ng-click="goToThisDetails('personalinfo',true)">Personal Information</a>
+                      </li>
+                      <li></li>
+                      <li></li>
+                      <li></li>
+                      <li></li>
+                      <li></li>
+                    </ul>
+                  </div><!--/.nav-collapse -->
                 </div>
-                <div class="form-group">
-                  <input type="text" ng-readonly="!isEditable" class="form-control" placeholder="address" ng-model="user.address"></input>
-                </div>
-                <div class="form-group">
-                  <input type="text" ng-readonly="!isEditable" class="form-control" placeholder="city" ng-model="user.city"></input>
-                </div>
-                <div class="form-group">
-                  <input type="text" ng-readonly="!isEditable" class="form-control" placeholder="country" ng-model="user.country"></input>
-                </div>
-                <div class="form-group">
-                  <input type="number" ng-readonly="!isEditable" class="form-control" placeholder="postalCode" ng-model="user.postalCode"></input>
-                </div>
-                <div class="form-group">
-                  <input type="date" ng-readonly="!isEditable" class="form-control" placeholder="27-03-1992" ng-model="user.dateOfBirth"></input>
-                </div>
-                <div class="form-group">
-                  <input type="number" ng-readonly="!isEditable" class="form-control" placeholder="contactNo" ng-model="user.contactNo"></input>
-                </div>
-                <button ng-click="isEditable = !isEditable" class="btn">edit</button>
-                <button ng-show="isEditable" type="submit" class="btn btn-primary">Update</button>
-            </form>
-
-          </h2>
-
-          <h2 id="sec1">
-
-            Appointments :-
-            <div ng-repeat="appointment in user.appointments">
-              <span >Appointment with Dr. {{appointment.physicianName}} at {{appointment.dateTime | date: "HH:mm:ss"}}
-                on {{appointment.dateTime | date: "yyyy-MM-dd"}} </span>
-                <span>
-                  <!-- Add Hangouts Button to launch Hangouts App for the appointment -->
-                </span>
-              <br>
+              </div>
             </div>
+          <!-- /Left -->
 
-          </h2>
+        <!-- Right -->
+        <div class="col-sm-10 col-lg-offset-2 "   style="background-color:grey;">
+          <br> <br> <br><br><br><br>
+          <p style="font-size:20px; padding-left:50px"> Medicos helps you connect with your psychotherapist easily,whenever,wherever.</p>
+          <p style="font-size:20px ;padding-left:50px"><a href="#">Read articles</a>,<a href="#">take part in discussions</a><a href="#"> and become a part of the community</a>
 
+          <div class="jumbotron">
+            <h1 >Hello Mr. {{user.username}} . Hope you are having a good time.
+            </h1>
+            <br>
+            <button type="button" class="btn btn-warning" style="margin-left:30px">See Appointments</button>
+          </div>
 
-          <h2 id="sec2">
-            .................<br><br>
+          <br><br><br><br><br><br><br><br><br><br><br><br>
+
+          <div id="doctors">
+            <div class="jumbotron">
+              <h1>Here is the list of doctors available</h1>
+              <ul>
+                <li>Dr a</li>
+                <li>Dr b</li>
+                <li>Dr c</li>
+                <li>Dr d</li>
+              </ul>
+            </div>
+          </div>
+          <br><br><br><br><br><br><br><br><br><br><br>
+
+          <div id="prescriptions">
+            <div class="jumbotron">
+              <h2>If you want prescriptions,you have come to the right place</h2>
+              <h3>Some prescriptions are to be added here depending upon the user</h3>
+            </div>
+          </div>
+          <br><br><br><br><br><br>
+
+          <div id ="personalinfo">
+            <div class="jumbotron">
+              <h3>Personal information of the user is to be added here</h3>
+              <form ng-submit="updateUserProfileDetails()"  style="margin-top:30px;">
+                  <div class="form-group">
+                    <input type="text" ng-readonly="!isEditable" class="form-control" placeholder="email" ng-model="user.email"></input>
+                  </div>
+                  <div class="form-group">
+                    <input type="text" ng-readonly="!isEditable" class="form-control" placeholder="address" ng-model="user.address"></input>
+                  </div>
+                  <div class="form-group">
+                    <input type="text" ng-readonly="!isEditable" class="form-control" placeholder="city" ng-model="user.city"></input>
+                  </div>
+                  <div class="form-group">
+                    <input type="text" ng-readonly="!isEditable" class="form-control" placeholder="country" ng-model="user.country"></input>
+                  </div>
+                  <div class="form-group">
+                    <input type="number" ng-readonly="!isEditable" class="form-control" placeholder="postalCode" ng-model="user.postalCode"></input>
+                  </div>
+                  <div class="form-group">
+                    <input type="date" ng-readonly="!isEditable" class="form-control" placeholder="27-03-1992" ng-model="user.dateOfBirth"></input>
+                  </div>
+                  <div class="form-group">
+                    <input type="number" ng-readonly="!isEditable" class="form-control" placeholder="contactNo" ng-model="user.contactNo"></input>
+                  </div>
+                  <button ng-click="isEditable = !isEditable" class="btn">edit</button>
+                  <button ng-show="isEditable" type="submit" class="btn btn-primary">Update</button>
+              </form>
+            </div>
+          </div>
+
+          <br><br><br><br><br><br><br><br><br><br>
+
+          <div id="meetings">
+            <div class="jumbotron">
+              <h3>Here the meetings of the user are to be added based on his appointments</h3>
+                  <div ng-repeat="appointment in user.appointments">
+                       <span >Appointment with Dr. {{appointment.physicianName}} at {{appointment.dateTime | date: "HH:mm:ss"}}
+                on {{appointment.dateTime | date: "yyyy-MM-dd"}} </span>
+                         <span>
+                         <!-- Add Hangouts Button to launch Hangouts App for the appointment -->
+                        </span>
+                        <br>
+                  </div>
 
             <ul id="calenderUl"> </ul>
 
@@ -274,14 +278,15 @@
               Authorize by Google
             </button>
             <pre id="output"></pre>
-
-            <br><br>
-          </h2>
-
+          </div>
         </div>
 
       </div>
     </div>
+ <!--Add content-->   
+<br><br><br><br><br><br><br><br><br><br><br><br>
+
+        <!--right-->
 
   </script>
 
@@ -500,7 +505,6 @@
 <!-- _________________________________________________________________________ -->
 
     <script type="text/ng-template" id="/login.html">
-    
       <div class="page-header">
         <h1>Medicos</h1>
       </div>
@@ -536,36 +540,19 @@
 
 
 
-<span id="signinButton">
-  <span
-    class="g-signin"
-    data-callback="signinCallback"
-    data-clientid="943541244956-8sj4q0ephevi3lfktcuv3mfdmu95048k.apps.googleusercontent.com"
-    data-cookiepolicy="single_host_origin"
-    data-requestvisibleactions="http://schema.org/AddAction"
-    data-scope="https://www.googleapis.com/auth/plus.login">
-  </span>
-</span>
-      
+      <span id="signinButton">
+        <span
+          class="g-signin"
+          data-callback="signinCallback"
+          data-clientid="943541244956-8sj4q0ephevi3lfktcuv3mfdmu95048k.apps.googleusercontent.com"
+          data-cookiepolicy="single_host_origin"
+          data-requestvisibleactions="http://schema.org/AddAction"
+          data-scope="https://www.googleapis.com/auth/plus.login">
+        </span>
+      </span>
+
     </script>
 <!-- _________________________________________________________________________ -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 </body>
 </html>

@@ -14,10 +14,6 @@ function($scope, users, auth){
   };
 
   loadGoogleCalendarEvents();
-  $scope.goToThisDetails=function(alignToTop){
-  	debugger;
-  	var redText = document.getElementById ("doctorselement");
-            redText.scrollIntoView (alignToTop);
-  }
+  
 
 }]);

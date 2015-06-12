@@ -1,3 +1,70 @@
+@media (min-width: 768px) {
+  .sidebar-nav .navbar .navbar-collapse {
+    //padding: 0;
+    //max-height: 400px;
+
+  }
+  .sidebar-nav .navbar ul {
+    float: none;
+    background-color: #00B7FF;
+  }
+  .sidebar-nav .navbar ul:not {
+    display: block;
+
+  }
+  .sidebar-nav .navbar li {
+    float: none;
+    display: block;
+    font-size: 20px;
+    background-color: #00B7FF;
+  }
+  .sidebar-nav .navbar li a {
+    //padding-top: 100px;
+    //padding-bottom: 40px; 
+    font-size: 15px;
+    //background-color: #00B7FF;
+  }
+  #header1{
+  position: fixed;
+  position: absolute;
+  height: 50px;
+  z-index: 1;
+  top: 0;
+}
+}
+
+
+
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
